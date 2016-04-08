@@ -1,0 +1,397 @@
+\documentclass[spanish]{beamer}
+
+\usetheme{default}
+
+\usepackage{polyglossia}
+
+\setdefaultlanguage{spanish}
+
+\usepackage{fancyvrb}
+
+\DefineShortVerb{\|}
+\DefineVerbatimEnvironment{code}{Verbatim}{frame=lines}
+
+\title{Haskell en ejemplos}
+\author{Juan Pedro Villa Isaza}
+\institute{Stack Builders}
+\date{8 de abril de 2016}
+
+\logo{\includegraphics[scale=0.15]{stackbuilders-logo.png}}
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\frame{\titlepage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]
+  \frametitle{¡Hola, Haskell!}
+
+  \begin{code}
+main :: IO ()
+main = putStrLn "¡Hola, Haskell!"
+  \end{code}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+  \frametitle{Haskell}
+
+  \begin{figure}
+    \includegraphics[scale=0.6]{haskell-logo.png}
+  \end{figure}
+
+  \begin{center}
+    \url{https://www.haskell.org/}
+  \end{center}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+  \frametitle{Haskell es...}
+
+  \begin{itemize}
+  \item Funcional
+  \item
+    Puro
+    \begin{itemize}
+    \item
+      Inmutabilidad
+    \item
+      Sin efectos secundarios
+    \item
+      Transparencia referencial
+    \end{itemize}
+  \item
+    Multipropósito
+  \item
+    ...
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]
+  \frametitle{Haskell es funcional}
+  \framesubtitle{Fibonacci}
+
+  \begin{code}
+fibonacci :: Integer -> Integer
+fibonacci 0 = 0
+fibonacci 1 = 1
+fibonacci n = fibonacci (n - 1) + fibonacci (n - 2)
+  \end{code}
+
+  \begin{code}
+> fibonacci 5
+5
+  \end{code}
+\end{frame}
+
+
+\begin{frame}[fragile]
+  \frametitle{Haskell es funcional}
+  \framesubtitle{Fibonacci}
+
+  \begin{code}
+int fibonacci(int n) {
+  if (n == 0)
+    return 0;
+  else if (n == 1)
+    return 1;
+  else
+    return fibonacci (n - 1) + fibonacci (n - 2);
+}
+  \end{code}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}<1>[fragile, label=factorial]
+  \frametitle{Haskell es puro}
+  \framesubtitle{Factorial}
+
+  \begin{code}
+factorial :: Integer -> Integer
+factorial 0 = 1
+factorial n = n * factorial (n - 1)
+  \end{code}
+
+  \begin{code}
+> factorial 5
+120
+  \end{code}
+\end{frame}
+
+
+\begin{frame}[fragile]
+  \frametitle{Haskell es puro}
+  \framesubtitle{Factorial}
+
+  \begin{code}
+int factorial(int n) {
+  int factorial = 1;
+  while (n > 0) {
+    factorial = factorial * n;
+    n = n - 1;
+  }
+  return factorial;
+}
+  \end{code}
+\end{frame}
+
+
+\begin{frame}[fragile]
+  \frametitle{Haskell es puro}
+  \framesubtitle{Factorial}
+
+  \begin{code}
+int factorial(int n) {
+  if (n == 0)
+    return 1;
+  else
+    return n * factorial(n - 1);
+}
+  \end{code}
+\end{frame}
+
+
+\againframe<2>{factorial}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]
+  \frametitle{Haskell es puro y funcional}
+  \framesubtitle{\texttt{reverse}}
+
+  \begin{code}
+reverse :: [a] -> [a]
+reverse []     = []
+reverse (x:xs) = reverse xs ++ [x]
+  \end{code}
+
+  \begin{code}
+> reverse [0,1,2,3,4,5]
+[5,4,3,2,1,0]
+  \end{code}
+\end{frame}
+
+
+\begin{frame}[fragile]
+  \frametitle{Haskell es puro y funcional}
+  \framesubtitle{\texttt{reverse}}
+
+  \begin{code}
+propReverse :: [Integer] -> Bool
+propReverse xs = reverse (reverse xs) == xs
+  \end{code}
+
+  \begin{code}
+> quickCheck propReverse
++++ OK, passed 100 tests.
+  \end{code}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+  \frametitle{Haskell tiene...}
+
+  \begin{itemize}
+  \item
+    Funciones de orden superior
+  \item
+    Evaluación perezosa
+  \item
+    ...
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]
+  \frametitle{Haskell tiene funciones de orden superior}
+  \framesubtitle{\texttt{map}}
+
+  \begin{code}
+map :: (a -> b) -> [a] -> [b]
+map _ []     = []
+map f (x:xs) = f x : map f xs
+  \end{code}
+
+  \begin{code}
+> map even [0,1,2,3,4,5]
+[True,False,True,False,True,False]
+  \end{code}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]
+  \frametitle{Haskell tiene funciones de orden superior}
+  \framesubtitle{\texttt{map}}
+
+  Los diez primeros números de Fibonacci (en C):
+  \begin{code}
+for (int i = 1; i <= 10; i++) {
+  printf("%d\n", fibonacci(i - 1));
+}
+  \end{code}
+\end{frame}
+
+
+\begin{frame}[fragile]
+  \frametitle{Haskell tiene funciones de orden superior}
+  \framesubtitle{\texttt{map}}
+
+  Los diez primeros números de Fibonacci (en Haskell):
+  \begin{code}
+> map fibonacci [0..9]
+[0,1,1,2,3,5,8,13,21,34]
+  \end{code}
+\end{frame}
+
+
+\begin{frame}[fragile]
+  \frametitle{Haskell tiene evaluación perezosa}
+  \framesubtitle{\texttt{map}}
+
+  Los diez primeros números de Fibonacci (en Haskell):
+  \begin{code}
+> let fibonaccis = map fibonacci [0..]
+> take 10 fibonaccis
+[0,1,1,2,3,5,8,13,21,34]
+  \end{code}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]
+  \frametitle{Haskell tiene funciones de orden superior}
+  \framesubtitle{\texttt{filter}}
+
+  \begin{code}
+filter :: (a -> Bool) -> [a] -> [a]
+filter _ []     = []
+filter p (x:xs)
+  | p x         = x : filter p xs
+  | otherwise   = filter p xs
+  \end{code}
+
+  \begin{code}
+> filter odd [0..9]
+[1,3,5,7,9]
+  \end{code}
+\end{frame}
+
+
+\begin{frame}[fragile]
+  \frametitle{Haskell tiene funciones de orden superior}
+  \framesubtitle{\texttt{filter}}
+
+  Los diez primeros números pares de Fibonacci (en C):
+  \begin{code}
+for (int i = 1, j = 0; i <= 10; j++) {
+  if (fibonacci(j) % 2 == 0) {
+    printf("%d\n", fibonacci(j));
+    i = i + 1;
+  }
+}
+  \end{code}
+\end{frame}
+
+
+\begin{frame}[fragile]
+  \frametitle{Haskell tiene funciones de orden superior}
+  \framesubtitle{\texttt{filter}}
+
+  Los diez primeros números pares de Fibonacci (en Haskell):
+  \begin{code}
+> take 10 (filter even fibonaccis)
+[0,2,8,34,144,610,2584,10946,46368,196418]
+  \end{code}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]
+  \frametitle{Haskell tiene funciones de orden superior}
+  \framesubtitle{\texttt{foldr}}
+
+  \begin{code}
+foldr :: (a -> b -> b) -> b -> [a] -> b
+foldr _ n []     = n
+foldr c n (x:xs) = c x (foldr c n xs)
+  \end{code}
+
+  \begin{code}
+sum :: [Integer] -> Integer
+sum ns = foldr (+) 0 ns
+  \end{code}
+\end{frame}
+
+
+\begin{frame}[fragile]
+  \frametitle{Haskell tiene funciones de orden superior}
+  \framesubtitle{\texttt{foldr}}
+
+  \begin{code}
+foldr :: (a -> b -> b) -> b -> [a] -> b
+foldr _ n []     = n
+foldr c n (x:xs) = c x (foldr c n xs)
+  \end{code}
+
+  \begin{code}
+sum :: [Integer] -> Integer
+sum = foldr (+) 0
+  \end{code}
+\end{frame}
+
+
+\begin{frame}[fragile]
+  \frametitle{Haskell tiene funciones de orden superior}
+  \framesubtitle{\texttt{foldr}}
+
+  La suma de los diez primeros números pares de Fibonacci (en C):
+  \begin{code}
+int s = 0;
+for (int i = 1, j = 0; i <= 10; j++) {
+  if (fibonacci(j) % 2 == 0) {
+    s = s + fibonacci(j);
+    i = i + 1;
+  }
+}
+printf("%d\n", s);
+  \end{code}
+\end{frame}
+
+
+\begin{frame}[fragile]
+  \frametitle{Haskell tiene funciones de orden superior}
+  \framesubtitle{\texttt{foldr}}
+
+  La suma de los diez primeros números pares de Fibonacci (en
+  Haskell):
+  \begin{code}
+> sum (take 10 (filter even fibonaccis))
+257114
+  \end{code}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+  \frametitle{Haskell en ejemplos}
+
+  \begin{center}
+    \url{https://github.com/stackbuilders/haskell-en-ejemplos}
+  \end{center}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
